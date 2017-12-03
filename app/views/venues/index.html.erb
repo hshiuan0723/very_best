@@ -69,7 +69,7 @@
     </div>
 
 <div class="form-group">
-      <%= f.label :specialties_name_cont, "Dish name contains" %>
+      <%= f.label :specialties_name_cont, "Bookmarked dish name contains" %>
       <%= f.text_field :specialties_name_cont, :class => "form-control", :placeholder => "Dish name contains" %>
     </div>
 
@@ -101,24 +101,27 @@
         <th>Neighborhood</th>
         <th>Actions</th>
       </tr>
-
       <% @venues.each do |venue| %>
-      <tr>
-        <td><%= venue.name %></td>
-        <td><%= venue.address %></td>
-        <td>
-          <% if venue.neighborhood.present? %>
-            <a href="/neighborhoods/<%= venue.neighborhood.id %>">
-              <%= venue.neighborhood.name %>
-            </a>
+        <% venue.fans.each do |fav| %>
+          <% if fav.id== current_user.id %>
+            <tr>
+              <td><%= venue.name %></td>
+              <td><%= venue.address %></td>
+              <td>
+                <% if venue.neighborhood.present? %>
+                  <a href="/neighborhoods/<%= venue.neighborhood.id %>">
+                    <%= venue.neighborhood.name %>
+                  </a>
+                <% end %>
+              </td>
+              <td>
+                <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
+                <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>
+                <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
+              </td>
+            </tr>
           <% end %>
-        </td>
-        <td>
-          <a href="/venues/<%= venue.id %>" class="btn btn-primary">Show</a>
-          <a href="/venues/<%= venue.id %>/edit" class="btn btn-warning">Edit</a>
-          <a href="/delete_venue/<%= venue.id %>" class="btn btn-danger" rel="nofollow">Delete</a>
-        </td>
-      </tr>
+        <% end %>
       <% end %>
     </table>
     <%= paginate @venues, theme: 'twitter-bootstrap-4' %>
